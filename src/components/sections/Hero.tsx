@@ -47,8 +47,8 @@ export function Hero() {
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg">
-              <a href={personalInfo.resume} download>
-                <Download className="mr-2 w-4 h-4" /> Resume
+              <a href="/resume" target="_blank" rel="noopener noreferrer">
+                <Download className="mr-2 w-4 h-4" /> Download Resume
               </a>
             </Button>
           </motion.div>
