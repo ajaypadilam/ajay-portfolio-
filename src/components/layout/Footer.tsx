@@ -1,6 +1,6 @@
 import { personalInfo } from "@/lib/data";
 import { Mail } from "lucide-react";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa";
 import Link from "next/link";
 
 export function Footer() {
@@ -13,15 +13,7 @@ export function Footer() {
             <p className="text-sm text-muted-foreground">{personalInfo.role}</p>
           </div>
           <div className="flex gap-4">
-            <Link
-              href={personalInfo.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <FaGithub className="w-5 h-5" />
-              <span className="sr-only">GitHub</span>
-            </Link>
+
             <Link
               href={personalInfo.linkedin}
               target="_blank"

@@ -5,7 +5,7 @@ import { personalInfo } from "@/lib/data";
 import { Button } from "../ui/Button";
 import Link from "next/link";
 import { Download, Mail, ArrowRight } from "lucide-react";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { FaLinkedin } from "react-icons/fa";
 
 export function Hero() {
   return (
@@ -59,12 +59,7 @@ export function Hero() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="mt-12 flex gap-4"
           >
-            <Button asChild variant="ghost" size="icon">
-              <Link href={personalInfo.github} target="_blank" rel="noopener noreferrer">
-                <FaGithub className="w-5 h-5" />
-                <span className="sr-only">GitHub</span>
-              </Link>
-            </Button>
+
             <Button asChild variant="ghost" size="icon">
               <Link href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer">
                 <FaLinkedin className="w-5 h-5" />

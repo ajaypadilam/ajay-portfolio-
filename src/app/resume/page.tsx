@@ -292,7 +292,7 @@ export default function ResumePage() {
               <div>📱 +91 9705068539</div>
               <div>📍 Kakinada, Andhra Pradesh</div>
               <div><a href="https://www.linkedin.com/in/ajay-padilam-985174311">linkedin.com/in/ajay-padilam</a></div>
-              <div><a href="https://github.com/ajaypadilam">github.com/ajaypadilam</a></div>
+
             </div>
           </div>
 
