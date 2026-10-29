@@ -14,7 +14,7 @@ export const personalInfo = {
   experience: "4.8 years",
   education: "B.Tech in Computer Science, graduated in 2021",
   focus: "Native Android development, Jetpack Compose, and POS hardware integrations.",
-  about: "I am a seasoned Senior Android Developer with 4.8 years of experience building high-performance mobile applications using Kotlin, Jetpack Compose, and MVVM/MVI architectures. I specialize in architecting offline-first Android solutions, integrating payment terminal SDKs, and setting up POS printers (Bluetooth, USB, Ethernet) using ESC commands. I possess extensive expertise in designing complex workflow-driven apps, robust background syncing mechanisms, and hardware-enabled features—making me a strong fit for Android POS development and cashier-focused MVP solutions.",
+  about: "Senior Android Developer & Team Lead with 4.8 years of experience delivering high-performance Android applications across diverse domains — including eCommerce, travel booking, real-time chat & calling apps, POS systems, and field-force solutions. Proficient in Kotlin, Jetpack Compose, and MVVM/MVI architectures. Hands-on expertise in payment gateway integrations, in-app subscriptions (Google Play Billing), offline-first architectures using Room DB & WorkManager, POS hardware integrations (ESC/POS printers, payment terminals, cash drawers), and end-to-end app submission & release management on the Google Play Console. Experienced in leading development teams and mentoring junior developers.",
   email: "ajaypadilam1999@gmail.com",
   github: "https://github.com/ajaypadilam", // Example placeholder
   linkedin: "https://www.linkedin.com/in/ajay-padilam-985174311",
@@ -31,7 +31,13 @@ export const skills = [
       "Jetpack Compose",
       "Android SDK",
       "Material 3",
-      "XML UI"
+      "XML UI",
+      "Hilt / Dagger",
+      "Google Play Billing",
+      "SIP / VoIP",
+      "Google Maps SDK",
+      "Firebase Cloud Messaging",
+      "Coil / Lottie"
     ]
   },
   {

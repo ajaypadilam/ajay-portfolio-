@@ -300,11 +300,14 @@ export default function ResumePage() {
           <div className="section">
             <div className="section-title">Professional Profile</div>
             <p className="profile-text">
-              Senior Android Developer &amp; Team Lead with <strong>4.8 years of experience</strong> building high-performance, 
-              offline-first Android applications using <strong>Kotlin, Jetpack Compose, MVVM/MVI</strong> and POS hardware integrations. 
-              Specializes in architecting robust offline-first solutions, integrating payment terminal SDKs, and setting up 
-              POS printers (Bluetooth, USB, Ethernet) via ESC/POS commands. Experienced in leading development teams, 
-              mentoring junior developers, and delivering complex workflow-driven POS and enterprise mobile applications.
+              Senior Android Developer &amp; Team Lead with <strong>4.8 years of experience</strong> delivering 
+              high-performance Android applications across diverse domains — including <strong>eCommerce, travel booking, 
+              real-time chat &amp; calling apps, POS systems</strong>, and field-force solutions. Proficient in 
+              <strong>Kotlin, Jetpack Compose, and MVVM/MVI</strong> architectures. Hands-on expertise in 
+              <strong>payment gateway integrations</strong>, <strong>in-app subscriptions (Google Play Billing)</strong>, 
+              offline-first architectures using Room DB &amp; WorkManager, POS hardware integrations (ESC/POS printers, 
+              payment terminals, cash drawers), and <strong>end-to-end app submission &amp; release management</strong> on 
+              the Google Play Console. Experienced in leading development teams and mentoring junior developers.
             </p>
           </div>
 
