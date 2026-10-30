@@ -85,8 +85,11 @@ export const skills = [
     icon: Wrench,
     items: [
       "Git",
-      "Firebase",
+      "Postman",
+      "Swagger",
+      "YouTrack",
       "Play Console",
+      "Firebase",
       "Google Cloud Console",
       "Google Maps",
       "Figma"

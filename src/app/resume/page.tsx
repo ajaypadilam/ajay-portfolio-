@@ -376,7 +376,7 @@ export default function ResumePage() {
 
                 <div className="skill-cat">Backend &amp; Tools</div>
                 <div className="skill-tags">
-                  {["Firebase","Retrofit","Room DB","SQLite","Git","Play Console","Google Cloud","Figma","Offline-first","Google Maps"].map(s => (
+                  {["Firebase","Retrofit","Room DB","Postman","Swagger","YouTrack","Git","Play Console","Google Cloud","Figma"].map(s => (
                     <span key={s} className="skill-tag">{s}</span>
                   ))}
                 </div>
