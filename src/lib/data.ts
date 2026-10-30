@@ -200,7 +200,7 @@ export const projects = [
       "Integrated Firebase Firestore for real-time chat, comments, likes, and active listener tracking.",
       "Implemented offline caching for playlists and interactions to ensure smooth continuity during network drops."
     ],
-    playStore: "",
+    playStore: "https://play.google.com/store/apps/details?id=com.krify.tuneconnect",
     demo: ""
   },
   {
