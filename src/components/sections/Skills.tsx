@@ -40,8 +40,13 @@ export function Skills() {
           {skills.map((skillGroup) => {
             const Icon = skillGroup.icon;
             return (
-              <motion.div key={skillGroup.category} variants={item}>
-                <Card className="h-full hover:shadow-md transition-shadow">
+              <motion.div
+                key={skillGroup.category}
+                variants={item}
+                whileHover={{ y: -6, scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+              >
+                <Card className="h-full border border-border/50 hover:border-primary/40 hover:shadow-[0_0_24px_rgba(139,92,246,0.15)] transition-all duration-300 cursor-default">
                   <CardHeader className="pb-4 flex flex-row items-center gap-4">
                     <div className="p-2 bg-primary/10 rounded-lg text-primary">
                       <Icon className="w-6 h-6" />
@@ -50,10 +55,18 @@ export function Skills() {
                   </CardHeader>
                   <CardContent>
                     <div className="flex flex-wrap gap-2">
-                      {skillGroup.items.map((skill) => (
-                        <Badge key={skill} variant="secondary" className="px-3 py-1 text-sm font-normal">
-                          {skill}
-                        </Badge>
+                      {skillGroup.items.map((skill, idx) => (
+                        <motion.div
+                          key={skill}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: idx * 0.04 }}
+                          viewport={{ once: true }}
+                        >
+                          <Badge variant="secondary" className="px-3 py-1 text-sm font-normal hover:bg-primary/20 hover:text-primary transition-colors cursor-default">
+                            {skill}
+                          </Badge>
+                        </motion.div>
                       ))}
                     </div>
                   </CardContent>
