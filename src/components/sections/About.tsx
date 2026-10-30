@@ -12,10 +12,9 @@ const domains = [
   "Real-time Chat & Calling",
   "POS Systems",
   "Field-Force Apps",
+  "On-Demand Delivery",
   "Payment Gateways",
   "In-App Subscriptions",
-  "Offline-First Architecture",
-  "Play Console Management",
 ];
 
 export function About() {
