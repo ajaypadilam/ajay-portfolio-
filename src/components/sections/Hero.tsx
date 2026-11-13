@@ -98,7 +98,7 @@ export function Hero() {
             className="flex gap-8 mb-10"
           >
             {[
-              { value: 4.8, suffix: "+", label: "Years Exp." },
+              { value: (personalInfo as any).yearsOfExperience || parseFloat(personalInfo.experience) || 4.8, suffix: "+", label: "Years Exp." },
               { value: 6, suffix: "+", label: "Apps Built" },
               { value: 3, suffix: "+", label: "Play Store" },
             ].map((s) => (

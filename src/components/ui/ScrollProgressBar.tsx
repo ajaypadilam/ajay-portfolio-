@@ -1,11 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion, useScroll, useSpring } from "framer-motion";
+import { usePathname } from "next/navigation";
 
 export function ScrollProgressBar() {
+  const pathname = usePathname();
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+
+  if (pathname === "/admin" || pathname === "/resume") {
+    return null;
+  }
 
   return (
     <motion.div

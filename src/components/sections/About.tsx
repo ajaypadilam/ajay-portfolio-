@@ -1,21 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { personalInfo } from "@/lib/data";
+import { personalInfo, domains } from "@/lib/data";
 import { SectionHeader } from "../ui/SectionHeader";
 import { Card, CardContent } from "../ui/Card";
 import { Briefcase, GraduationCap, Code2 } from "lucide-react";
-
-const domains = [
-  "eCommerce",
-  "Travel Booking",
-  "Real-time Chat & Calling",
-  "POS Systems",
-  "Field-Force Apps",
-  "On-Demand Delivery",
-  "Payment Gateways",
-  "In-App Subscriptions",
-];
 
 export function About() {
   return (

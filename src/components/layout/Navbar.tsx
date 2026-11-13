@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { personalInfo } from "@/lib/data";
 import { ThemeToggle } from "../ui/ThemeToggle";
@@ -17,6 +18,11 @@ const navLinks = [
 
 export function Navbar() {
   const [isOpen, setIsOpen] = React.useState(false);
+  const pathname = usePathname();
+
+  if (pathname === "/admin" || pathname === "/resume") {
+    return null;
+  }
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">

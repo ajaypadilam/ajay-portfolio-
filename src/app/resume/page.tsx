@@ -1,5 +1,7 @@
 "use client";
 
+import { personalInfo } from "@/lib/data";
+
 export default function ResumePage() {
   const handlePrint = () => window.print();
 
@@ -156,14 +158,14 @@ export default function ResumePage() {
         <div className="resume">
 
           {/* ── HEADER ── */}
-          <div className="r-name">Ajay Padilam</div>
-          <div className="r-role">Senior Android Developer &amp; Team Lead</div>
+          <div className="r-name">{personalInfo.name}</div>
+          <div className="r-role">{personalInfo.role}</div>
           <div className="r-contacts">
-            <span>📞 +919705068539</span>
-            <span>✉️ ajaypadilam1999@gmail.com</span>
-            <span>🔗 <a href="https://www.linkedin.com/in/ajay-padilam-985174311" target="_blank" rel="noreferrer">linkedin.com/in/ajay-padilam-985174311</a></span>
+            <span>📞 {personalInfo.phone}</span>
+            <span>✉️ {personalInfo.email}</span>
+            <span>🔗 <a href={personalInfo.linkedin} target="_blank" rel="noreferrer">{personalInfo.linkedin.replace("https://www.", "").replace("https://", "")}</a></span>
           </div>
-          <div className="r-location">📍 Kakinada, Andhra Pradesh</div>
+          <div className="r-location">📍 {personalInfo.location}</div>
           <hr className="header-divider" />
 
           {/* ── BODY ── */}
@@ -325,7 +327,7 @@ export default function ResumePage() {
               <div className="section">
                 <div className="sec-title">Summary</div>
                 <p className="summary-text">
-                  Senior Android Developer &amp; Team Lead with <strong>4.8 years of experience</strong> delivering high-performance Android applications across diverse domains — including eCommerce, travel booking, real-time chat &amp; calling apps, POS systems, and field-force solutions. Proficient in <strong>Kotlin, Jetpack Compose, and MVVM/MVI</strong> architectures. Hands-on expertise in payment gateway integrations, in-app subscriptions (Google Play Billing), offline-first architectures using Room DB &amp; WorkManager, POS hardware integrations (ESC/POS printers, payment terminals, cash drawers), and end-to-end app submission &amp; release management on the Google Play Console. Experienced in leading development teams and mentoring junior developers.
+                  {personalInfo.about}
                 </p>
               </div>
 

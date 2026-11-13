@@ -1,9 +1,18 @@
+"use client";
+
 import { personalInfo } from "@/lib/data";
 import { Mail } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function Footer() {
+  const pathname = usePathname();
+
+  if (pathname === "/admin" || pathname === "/resume") {
+    return null;
+  }
+
   return (
     <footer className="border-t border-border bg-background py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -13,7 +22,6 @@ export function Footer() {
             <p className="text-sm text-muted-foreground">{personalInfo.role}</p>
           </div>
           <div className="flex gap-4">
-
             <Link
               href={personalInfo.linkedin}
               target="_blank"
