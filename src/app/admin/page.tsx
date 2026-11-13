@@ -19,6 +19,8 @@ import {
   Key,
   Globe,
   ShieldCheck,
+  LogOut,
+  Check,
 } from "lucide-react";
 
 export default function AdminPage() {
@@ -29,6 +31,7 @@ export default function AdminPage() {
   const [githubToken, setGithubToken] = useState("");
   const [tokenSaved, setTokenSaved] = useState(false);
 
+  const [hasServerToken, setHasServerToken] = useState(false);
   const [activeTab, setActiveTab] = useState<"profile" | "projects" | "experience" | "skills" | "deploy" | "security">("profile");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -42,9 +45,9 @@ export default function AdminPage() {
   const [passwordStatus, setPasswordStatus] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [changingPassword, setChangingPassword] = useState(false);
 
-  // Check stored auth on mount
+  // Check stored auth on mount (persisted in localStorage across tabs/browsers)
   useEffect(() => {
-    const savedPass = sessionStorage.getItem("admin_pass");
+    const savedPass = localStorage.getItem("admin_pass");
     if (savedPass) {
       setPassword(savedPass);
       setIsAuthenticated(true);
@@ -59,6 +62,9 @@ export default function AdminPage() {
       .then((res) => res.json())
       .then((d) => {
         setData(d);
+        if (d.hasServerToken) {
+          setHasServerToken(true);
+        }
         setLoading(false);
       })
       .catch((err) => {
@@ -73,9 +79,15 @@ export default function AdminPage() {
       setAuthError("Please enter your admin password");
       return;
     }
-    sessionStorage.setItem("admin_pass", password);
+    localStorage.setItem("admin_pass", password);
     setIsAuthenticated(true);
     setAuthError("");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("admin_pass");
+    setIsAuthenticated(false);
+    setPassword("");
   };
 
   const saveGithubToken = (tokenVal: string) => {
@@ -123,7 +135,7 @@ export default function AdminPage() {
       } else {
         setPasswordStatus({ type: "success", text: result.message || "Password updated successfully!" });
         setPassword(newPassword);
-        sessionStorage.setItem("admin_pass", newPassword);
+        localStorage.setItem("admin_pass", newPassword);
         setCurrentPassword("");
         setNewPassword("");
         setConfirmPassword("");
@@ -155,7 +167,7 @@ export default function AdminPage() {
       if (!res.ok) {
         if (res.status === 401) {
           setIsAuthenticated(false);
-          sessionStorage.removeItem("admin_pass");
+          localStorage.removeItem("admin_pass");
           setAuthError("Invalid password. Please log in again.");
           setStatusMessage({ type: "error", text: "Invalid password." });
         } else {
@@ -267,6 +279,13 @@ export default function AdminPage() {
             <ExternalLink className="w-3.5 h-3.5" />
           </Link>
 
+          {(hasServerToken || githubToken) && (
+            <span className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1 text-xs text-emerald-300 bg-emerald-950/60 border border-emerald-800/60 rounded-lg">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Live Auto-Deploy Active</span>
+            </span>
+          )}
+
           <button
             onClick={copyJson}
             title="Copy JSON to clipboard"
@@ -281,6 +300,14 @@ export default function AdminPage() {
             className="p-2 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-800 border border-slate-700 rounded-lg transition-colors"
           >
             <Download className="w-4 h-4" />
+          </button>
+
+          <button
+            onClick={handleLogout}
+            title="Log Out of Admin"
+            className="p-2 text-slate-400 hover:text-rose-400 bg-slate-800/80 hover:bg-slate-800 border border-slate-700 rounded-lg transition-colors"
+          >
+            <LogOut className="w-4 h-4" />
           </button>
 
           <button
@@ -303,8 +330,8 @@ export default function AdminPage() {
         </div>
       </header>
 
-      {/* GitHub Integration Notice */}
-      {!githubToken && (
+      {/* GitHub Integration Notice (only shown if not connected on server nor client) */}
+      {!hasServerToken && !githubToken && (
         <div className="max-w-6xl mx-auto mt-4 px-4 py-3 bg-amber-950/40 border border-amber-800/50 rounded-xl flex items-center justify-between gap-4 text-xs sm:text-sm text-amber-200">
           <div className="flex items-center gap-2.5">
             <Key className="w-4 h-4 text-amber-400 shrink-0" />
