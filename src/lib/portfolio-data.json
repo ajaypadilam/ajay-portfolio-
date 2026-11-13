@@ -1,4 +1,7 @@
 {
+  "settings": {
+    "adminPassword": "ajay1234"
+  },
   "personalInfo": {
     "name": "Ajay Padilam",
     "role": "Senior Android Developer & Team Lead",

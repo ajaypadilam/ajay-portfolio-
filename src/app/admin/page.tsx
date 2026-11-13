@@ -18,6 +18,7 @@ import {
   Copy,
   Key,
   Globe,
+  ShieldCheck,
 } from "lucide-react";
 
 export default function AdminPage() {
@@ -28,11 +29,18 @@ export default function AdminPage() {
   const [githubToken, setGithubToken] = useState("");
   const [tokenSaved, setTokenSaved] = useState(false);
 
-  const [activeTab, setActiveTab] = useState<"profile" | "projects" | "experience" | "skills" | "deploy">("profile");
+  const [activeTab, setActiveTab] = useState<"profile" | "projects" | "experience" | "skills" | "deploy" | "security">("profile");
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [statusMessage, setStatusMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  // Change password states
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordStatus, setPasswordStatus] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [changingPassword, setChangingPassword] = useState(false);
 
   // Check stored auth on mount
   useEffect(() => {
@@ -75,6 +83,56 @@ export default function AdminPage() {
     localStorage.setItem("admin_gh_token", tokenVal);
     setTokenSaved(true);
     setTimeout(() => setTokenSaved(false), 2500);
+  };
+
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordStatus(null);
+
+    if (!currentPassword) {
+      setPasswordStatus({ type: "error", text: "Please enter your current password." });
+      return;
+    }
+
+    if (!newPassword || newPassword.length < 4) {
+      setPasswordStatus({ type: "error", text: "New password must be at least 4 characters long." });
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordStatus({ type: "error", text: "New password and confirmation do not match." });
+      return;
+    }
+
+    setChangingPassword(true);
+    try {
+      const res = await fetch("/api/admin/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+          githubToken: githubToken.trim(),
+        }),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        setPasswordStatus({ type: "error", text: result.error || "Failed to update password." });
+      } else {
+        setPasswordStatus({ type: "success", text: result.message || "Password updated successfully!" });
+        setPassword(newPassword);
+        sessionStorage.setItem("admin_pass", newPassword);
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+      }
+    } catch (err: any) {
+      setPasswordStatus({ type: "error", text: err.message || "Error updating password." });
+    } finally {
+      setChangingPassword(false);
+    }
   };
 
   const handleSave = async () => {
@@ -162,10 +220,6 @@ export default function AdminPage() {
             >
               Access Dashboard
             </button>
-
-            <p className="text-xs text-slate-500 text-center mt-4">
-              Default password: <code className="text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">ajay1234</code>
-            </p>
           </form>
 
           <div className="mt-6 text-center border-t border-slate-800 pt-4">
@@ -295,6 +349,7 @@ export default function AdminPage() {
             { id: "experience", label: `Experience (${data.experience?.length || 0})`, icon: Briefcase },
             { id: "skills", label: "Skills & Domains", icon: Wrench },
             { id: "deploy", label: "Live Deploy Settings", icon: Globe },
+            { id: "security", label: "Security & Password", icon: ShieldCheck },
           ].map((tab) => {
             const Icon = tab.icon;
             const active = activeTab === tab.id;
@@ -954,6 +1009,88 @@ export default function AdminPage() {
                 </ol>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* ================= TAB 6: SECURITY & PASSWORD ================= */}
+        {activeTab === "security" && (
+          <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6 max-w-2xl">
+            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-cyan-400" />
+              <span>Change Admin Password</span>
+            </h2>
+
+            <p className="text-sm text-slate-300">
+              Update the password required to access this dashboard.
+            </p>
+
+            {passwordStatus && (
+              <div
+                className={`p-4 rounded-xl border flex items-center gap-3 text-sm ${
+                  passwordStatus.type === "success"
+                    ? "bg-emerald-950/60 border-emerald-800/60 text-emerald-300"
+                    : "bg-rose-950/60 border-rose-800/60 text-rose-300"
+                }`}
+              >
+                {passwordStatus.type === "success" ? (
+                  <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 shrink-0 text-rose-400" />
+                )}
+                <span>{passwordStatus.text}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleChangePassword} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                  Current Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="Enter current password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-cyan-400 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="At least 4 characters"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-cyan-400 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                  Confirm New Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="Re-enter new password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-cyan-400 text-sm"
+                />
+              </div>
+
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  disabled={changingPassword}
+                  className="px-5 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-medium text-sm rounded-xl shadow-lg transition-all disabled:opacity-50"
+                >
+                  {changingPassword ? "Updating..." : "Update Password"}
+                </button>
+              </div>
+            </form>
           </div>
         )}
       </main>
