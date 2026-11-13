@@ -1,16 +1,34 @@
 import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import portfolioData from "@/lib/portfolio-data.json";
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "ajay1234";
 const GITHUB_REPO = process.env.GITHUB_REPO || "ajaypadilam/ajay-portfolio-";
+
+export function getExpectedPassword(): string {
+  try {
+    const filePath = path.join(process.cwd(), "src/lib/portfolio-data.json");
+    if (fs.existsSync(filePath)) {
+      const raw = JSON.parse(fs.readFileSync(filePath, "utf8"));
+      if (raw?.settings?.adminPassword?.trim()) {
+        return raw.settings.adminPassword.trim();
+      }
+    }
+  } catch (e) {
+    // fallback
+  }
+
+  return (portfolioData as any)?.settings?.adminPassword?.trim() || process.env.ADMIN_PASSWORD || "ajay1234";
+}
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { password, data, githubToken: clientToken } = body;
 
-    if (!password || password !== ADMIN_PASSWORD) {
+    const expectedPassword = getExpectedPassword();
+
+    if (!password || password !== expectedPassword) {
       return NextResponse.json(
         { error: "Invalid admin password" },
         { status: 401 }
@@ -22,6 +40,11 @@ export async function POST(req: NextRequest) {
         { error: "Invalid data payload" },
         { status: 400 }
       );
+    }
+
+    // Preserve existing settings if not provided in payload
+    if (!data.settings) {
+      data.settings = (portfolioData as any)?.settings || { adminPassword: "" };
     }
 
     const formattedJson = JSON.stringify(data, null, 2);
