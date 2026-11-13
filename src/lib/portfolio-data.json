@@ -2,8 +2,8 @@
   "personalInfo": {
     "name": "Ajay Padilam",
     "role": "Senior Android Developer & Team Lead",
-    "experience": "4.8 years",
-    "yearsOfExperience": 4.8,
+    "experience": "5 years",
+    "yearsOfExperience": 5,
     "education": "B.Tech in Computer Science, graduated in 2021",
     "phone": "+919705068539",
     "email": "ajaypadilam1999@gmail.com",
@@ -154,7 +154,14 @@
     {
       "title": "ZPOS",
       "description": "Next-generation Point of Sale System for Android inbuilt terminals and landscape POS devices.",
-      "technologies": ["Android", "Kotlin", "Jetpack Compose", "MVVM", "Room Database", "Hardware SDKs"],
+      "technologies": [
+        "Android",
+        "Kotlin",
+        "Jetpack Compose",
+        "MVVM",
+        "Room Database",
+        "Hardware SDKs"
+      ],
       "responsibilities": [
         "Completed Phase 1 development tailored for Android inbuilt payment terminals.",
         "Currently architecting and developing the landscape version optimized for dedicated dual-screen POS hardware.",
@@ -166,7 +173,13 @@
     {
       "title": "Refuelex",
       "description": "Mobile Fuel Ordering & Delivery Suite (Customer, Employee & Agent Apps).",
-      "technologies": ["Android", "Kotlin", "Jetpack Compose", "MVVM", "WorkManager"],
+      "technologies": [
+        "Android",
+        "Kotlin",
+        "Jetpack Compose",
+        "MVVM",
+        "WorkManager"
+      ],
       "responsibilities": [
         "Built the entire app UI using Jetpack Compose for speed and responsiveness.",
         "Integrated GPS modules for location-based fuel delivery and live tracking.",
@@ -178,7 +191,13 @@
     {
       "title": "Handdy",
       "description": "Employee Monitoring & Productivity Tracking App supporting remote and field workforce.",
-      "technologies": ["Android", "Kotlin", "Room Database", "GPS", "Biometric API"],
+      "technologies": [
+        "Android",
+        "Kotlin",
+        "Room Database",
+        "GPS",
+        "Biometric API"
+      ],
       "responsibilities": [
         "Implemented Room DB + WorkManager-based sync, ensuring all field activity works completely offline.",
         "Developed modules for time tracking, GPS monitoring, and productivity analytics.",
@@ -190,7 +209,12 @@
     {
       "title": "Avfuel",
       "description": "Aviation Fuel Dispensing & POS Invoice Management Tablet App.",
-      "technologies": ["Android", "Java/Kotlin", "Retrofit", "POS Printer Integration"],
+      "technologies": [
+        "Android",
+        "Java/Kotlin",
+        "Retrofit",
+        "POS Printer Integration"
+      ],
       "responsibilities": [
         "Built offline data handling for remote airfields with limited connectivity, prioritizing reliable local storage.",
         "Integrated signature capture, order summary, and fast invoice printing via connected POS printer SDKs.",
@@ -202,7 +226,13 @@
     {
       "title": "TuneConnect",
       "description": "Music Discovery & Social Interaction Platform merging streaming with social networking.",
-      "technologies": ["Android", "Kotlin", "MVVM", "Firebase", "Firestore"],
+      "technologies": [
+        "Android",
+        "Kotlin",
+        "MVVM",
+        "Firebase",
+        "Firestore"
+      ],
       "responsibilities": [
         "Integrated Firebase Firestore for real-time chat, comments, likes, and active listener tracking.",
         "Implemented offline caching for playlists and interactions to ensure smooth continuity during network drops."
@@ -213,7 +243,13 @@
     {
       "title": "GoMyTrip",
       "description": "All-in-One Travel Booking Platform for buses, trains, cabs, flights, and hotels.",
-      "technologies": ["Android", "Kotlin", "MVVM", "Firebase", "Retrofit"],
+      "technologies": [
+        "Android",
+        "Kotlin",
+        "MVVM",
+        "Firebase",
+        "Retrofit"
+      ],
       "responsibilities": [
         "Developed modular UI components for complex booking flows using MVVM.",
         "Built offline caching for trips, bookings, and itinerary management to support low-connectivity travel environments."
