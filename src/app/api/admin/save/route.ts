@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import portfolioData from "@/lib/portfolio-data.json";
+import { decryptToken } from "@/lib/crypto";
 
 const GITHUB_REPO = process.env.GITHUB_REPO || "ajaypadilam/ajay-portfolio-";
 
@@ -48,7 +49,15 @@ export async function POST(req: NextRequest) {
     }
 
     const formattedJson = JSON.stringify(data, null, 2);
-    const token = clientToken || process.env.GITHUB_TOKEN;
+
+    // Resolve token: clientToken -> env -> decrypted token from settings
+    let token = clientToken || process.env.GITHUB_TOKEN;
+    if (!token) {
+      const enc = data?.settings?.encryptedGithubToken || (portfolioData as any)?.settings?.encryptedGithubToken;
+      if (enc) {
+        token = decryptToken(enc, password) || undefined;
+      }
+    }
 
     // 1. Try local filesystem write (works in local development)
     let localSaved = false;
