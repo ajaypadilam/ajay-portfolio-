@@ -11,10 +11,10 @@ import {
 export const personalInfo = {
   name: "Ajay Padilam",
   role: "Senior Android Developer",
-  experience: "4.8 years",
+  experience: "5 years",
   education: "B.Tech in Computer Science, graduated in 2021",
   focus: "Kotlin · Jetpack Compose · MVVM/MVI · Offline-first · POS · eCommerce · Booking · Real-time Chat & Calling · In-App Billing · Play Console",
-  about: "Senior Android Developer & Team Lead with 4.8 years of experience delivering high-performance Android applications across diverse domains — including eCommerce, travel booking, real-time chat & calling apps, POS systems, and field-force solutions. Proficient in Kotlin, Jetpack Compose, and MVVM/MVI architectures. Hands-on expertise in payment gateway integrations, in-app subscriptions (Google Play Billing), offline-first architectures using Room DB & WorkManager, POS hardware integrations (ESC/POS printers, payment terminals, cash drawers), and end-to-end app submission & release management on the Google Play Console. Experienced in leading development teams and mentoring junior developers.",
+  about: "Senior Android Developer & Team Lead with 5 years of experience delivering high-performance Android applications across diverse domains — including eCommerce, travel booking, real-time chat & calling apps, POS systems, and field-force solutions. Proficient in Kotlin, Jetpack Compose, and MVVM/MVI architectures. Hands-on expertise in payment gateway integrations, in-app subscriptions (Google Play Billing), offline-first architectures using Room DB & WorkManager, POS hardware integrations (ESC/POS printers, payment terminals, cash drawers), and end-to-end app submission & release management on the Google Play Console. Experienced in leading development teams and mentoring junior developers.",
   email: "ajaypadilam1999@gmail.com",
   github: "https://github.com/ajaypadilam", // Example placeholder
   linkedin: "https://www.linkedin.com/in/ajay-padilam-985174311",
