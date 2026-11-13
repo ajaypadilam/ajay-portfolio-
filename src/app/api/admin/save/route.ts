@@ -4,12 +4,11 @@ import path from "path";
 
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "ajay1234";
 const GITHUB_REPO = process.env.GITHUB_REPO || "ajaypadilam/ajay-portfolio-";
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { password, data } = body;
+    const { password, data, githubToken: clientToken } = body;
 
     if (!password || password !== ADMIN_PASSWORD) {
       return NextResponse.json(
@@ -26,8 +25,9 @@ export async function POST(req: NextRequest) {
     }
 
     const formattedJson = JSON.stringify(data, null, 2);
+    const token = clientToken || process.env.GITHUB_TOKEN;
 
-    // 1. Try local filesystem write (for local development)
+    // 1. Try local filesystem write (works in local development)
     let localSaved = false;
     try {
       const filePath = path.join(process.cwd(), "src/lib/portfolio-data.json");
@@ -37,11 +37,11 @@ export async function POST(req: NextRequest) {
       console.warn("Local filesystem write skipped/failed:", fsErr);
     }
 
-    // 2. If GITHUB_TOKEN is present, commit directly to GitHub repository (works in Vercel production)
+    // 2. If token is present, commit directly to GitHub repository (works on Vercel production)
     let githubSaved = false;
     let githubError: string | null = null;
 
-    if (GITHUB_TOKEN) {
+    if (token) {
       try {
         const branches = ["main", "dev"];
         for (const branch of branches) {
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
           const getUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/src/lib/portfolio-data.json?ref=${branch}`;
           const getRes = await fetch(getUrl, {
             headers: {
-              Authorization: `Bearer ${GITHUB_TOKEN}`,
+              Authorization: `Bearer ${token}`,
               Accept: "application/vnd.github.v3+json",
               "User-Agent": "portfolio-admin",
             },
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
           const putRes = await fetch(putUrl, {
             method: "PUT",
             headers: {
-              Authorization: `Bearer ${GITHUB_TOKEN}`,
+              Authorization: `Bearer ${token}`,
               Accept: "application/vnd.github.v3+json",
               "Content-Type": "application/json",
               "User-Agent": "portfolio-admin",
@@ -91,16 +91,23 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    let message = "";
+    if (githubSaved) {
+      message = "🎉 Successfully saved & committed to GitHub! Vercel is currently deploying your updates live (ready in ~1 minute).";
+    } else if (localSaved && !token) {
+      message = "Saved locally on your machine. To deploy to your live website, enter your GitHub Token in Admin Settings.";
+    } else if (githubError) {
+      message = `GitHub Commit Error: ${githubError}`;
+    } else {
+      message = "⚠️ Could not commit to GitHub. Please provide a GitHub Personal Access Token to enable live Vercel deployments.";
+    }
+
     return NextResponse.json({
-      success: true,
+      success: githubSaved || localSaved,
       localSaved,
       githubSaved,
       githubError,
-      message: githubSaved
-        ? "Successfully saved & committed to GitHub! Vercel is deploying your updates live."
-        : localSaved
-        ? "Saved locally to portfolio-data.json."
-        : "Data updated.",
+      message,
     });
   } catch (error: any) {
     return NextResponse.json(
