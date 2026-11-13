@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import portfolioData from "@/lib/portfolio-data.json";
 
 export async function GET() {
-  const hasServerToken = Boolean(process.env.GITHUB_TOKEN);
+  const hasServerToken = Boolean(
+    process.env.GITHUB_TOKEN ||
+    (portfolioData as any)?.settings?.encryptedGithubToken
+  );
 
   return NextResponse.json(
     {

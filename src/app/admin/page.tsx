@@ -30,6 +30,8 @@ export default function AdminPage() {
 
   const [githubToken, setGithubToken] = useState("");
   const [tokenSaved, setTokenSaved] = useState(false);
+  const [savingToken, setSavingToken] = useState(false);
+  const [tokenMessage, setTokenMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   const [hasServerToken, setHasServerToken] = useState(false);
   const [activeTab, setActiveTab] = useState<"profile" | "projects" | "experience" | "skills" | "deploy" | "security">("profile");
@@ -90,11 +92,41 @@ export default function AdminPage() {
     setPassword("");
   };
 
-  const saveGithubToken = (tokenVal: string) => {
-    setGithubToken(tokenVal);
-    localStorage.setItem("admin_gh_token", tokenVal);
-    setTokenSaved(true);
-    setTimeout(() => setTokenSaved(false), 2500);
+  const saveGithubToken = async (tokenVal: string) => {
+    if (!tokenVal || !tokenVal.trim().startsWith("ghp_")) {
+      setTokenMessage({ type: "error", text: "Please enter a valid GitHub token starting with ghp_" });
+      return;
+    }
+
+    setSavingToken(true);
+    setTokenMessage(null);
+
+    try {
+      const res = await fetch("/api/admin/save-token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ password, token: tokenVal.trim() }),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        setTokenMessage({ type: "error", text: result.error || "Failed to save token" });
+      } else {
+        setGithubToken(tokenVal.trim());
+        localStorage.setItem("admin_gh_token", tokenVal.trim());
+        setHasServerToken(true);
+        setTokenSaved(true);
+        setTokenMessage({
+          type: "success",
+          text: "🎉 Token permanently saved! It will now work across all computers, phones, and incognito sessions.",
+        });
+      }
+    } catch (err: any) {
+      setTokenMessage({ type: "error", text: err.message || "Network error while saving token." });
+    } finally {
+      setSavingToken(false);
+    }
   };
 
   const handleChangePassword = async (e: React.FormEvent) => {
@@ -978,15 +1010,43 @@ export default function AdminPage() {
               <span>Live Auto-Deploy Settings</span>
             </h2>
 
-            <p className="text-sm text-slate-300 leading-relaxed">
-              When you click <strong>Save &amp; Publish</strong>, the admin panel commits your changes directly to your GitHub repository (<code>ajaypadilam/ajay-portfolio-</code>).
-              Vercel instantly detects the commit and rebuilds your live website in ~1 minute.
-            </p>
+            {hasServerToken ? (
+              <div className="p-4 bg-emerald-950/60 border border-emerald-800/60 rounded-xl flex items-center gap-3 text-emerald-300 text-sm">
+                <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400" />
+                <div>
+                  <p className="font-semibold">GitHub Live Deploy is Connected!</p>
+                  <p className="text-xs text-emerald-400/80 mt-0.5">
+                    Your token is securely stored. Clicking &ldquo;Save &amp; Publish&rdquo; will automatically update your live site across any device or browser, including incognito.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm text-slate-300 leading-relaxed">
+                Save your GitHub Token once here to connect your repository (<code>ajaypadilam/ajay-portfolio-</code>). Once saved, it will work across all your systems and incognito windows permanently!
+              </p>
+            )}
+
+            {tokenMessage && (
+              <div
+                className={`p-4 rounded-xl border flex items-center gap-3 text-sm ${
+                  tokenMessage.type === "success"
+                    ? "bg-emerald-950/60 border-emerald-800/60 text-emerald-300"
+                    : "bg-rose-950/60 border-rose-800/60 text-rose-300"
+                }`}
+              >
+                {tokenMessage.type === "success" ? (
+                  <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400" />
+                ) : (
+                  <AlertCircle className="w-5 h-5 shrink-0 text-rose-400" />
+                )}
+                <span>{tokenMessage.text}</span>
+              </div>
+            )}
 
             <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 space-y-4">
               <div className="flex items-center gap-2 text-cyan-400 font-semibold text-sm">
                 <Key className="w-4 h-4" />
-                <span>GitHub Personal Access Token</span>
+                <span>{hasServerToken ? "Update / Replace GitHub Token" : "Enter GitHub Personal Access Token"}</span>
               </div>
 
               <div>
@@ -1002,16 +1062,12 @@ export default function AdminPage() {
               <div className="flex items-center gap-3">
                 <button
                   type="button"
-                  onClick={() => saveGithubToken(githubToken.trim())}
-                  className="px-4 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-xs sm:text-sm rounded-xl transition-all"
+                  disabled={savingToken}
+                  onClick={() => saveGithubToken(githubToken)}
+                  className="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-semibold text-xs sm:text-sm rounded-xl shadow-lg transition-all disabled:opacity-50"
                 >
-                  Save Token in Browser
+                  {savingToken ? "Connecting & Saving..." : "Save Token Permanently (All Devices & Incognito)"}
                 </button>
-                {tokenSaved && (
-                  <span className="text-xs text-emerald-400 flex items-center gap-1">
-                    <CheckCircle2 className="w-4 h-4" /> Token saved!
-                  </span>
-                )}
               </div>
 
               <div className="border-t border-slate-700/60 pt-4 space-y-2 text-xs text-slate-400">
@@ -1032,7 +1088,7 @@ export default function AdminPage() {
                   <li>Set Note to: <code className="bg-slate-900 px-1 py-0.5 rounded text-slate-300">Portfolio Admin</code></li>
                   <li>Select the checkbox: <code className="bg-slate-900 px-1 py-0.5 rounded text-cyan-300 font-bold">repo</code> (Full control of repositories)</li>
                   <li>Scroll to the bottom and click <strong>Generate token</strong>.</li>
-                  <li>Copy the token (starts with <code className="text-slate-300">ghp_...</code>) and paste it in the box above!</li>
+                  <li>Paste the token (<code className="text-slate-300">ghp_...</code>) above and click <strong>Save Token Permanently</strong>!</li>
                 </ol>
               </div>
             </div>
